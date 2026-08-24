@@ -1,148 +1,211 @@
 # Odoo SaaS Subscriptions Module
 
-Module Odoo 19 pour la gestion complète des souscriptions SaaS aux instances Odoo.
+## Description
 
-## Fonctionnalités
+Module complet de gestion des souscriptions SaaS pour instances Odoo. Ce module fournit une solution d'entreprise pour gérer les plans, les instances, les souscriptions et le monitoring des ressources.
 
-### Gestion des Instances
-- ✅ Création d'instances Odoo
-- ✅ Activation/Désactivation d'instances
-- ✅ Suppression d'instances
-- ✅ Allocation des espaces disques
-- ✅ Suivi des ressources utilisées
+## Caractéristiques principales
 
-### Gestion des Formules
-- ✅ Création de plans/formules personnalisés
-- ✅ Configuration des limites de ressources
-- ✅ Gestion des prix et tarification
-- ✅ Historique des modifications
+✅ **Gestion complète des plans** - Créez et gérez des plans SaaS flexibles
+✅ **Instances Odoo** - Déployez et gérez des instances pour vos clients
+✅ **Souscriptions clients** - Suivez les souscriptions avec facturation flexible
+✅ **Monitoring des ressources** - Suivi en temps réel avec alertes
+✅ **API REST** - Endpoints complets pour intégration tierce
+✅ **Automatisation** - Renouvellement automatique, notifications, nettoyage
+✅ **Rapports PDF** - Génération de rapports personnalisés
+✅ **Interface web** - Vues conviviales avec formulaires et listes
+✅ **Sécurité** - Contrôle d'accès par rôle
+✅ **Traçabilité** - Historique complet des modifications
 
-### Gestion des Souscriptions
-- ✅ Association client/instance/plan
-- ✅ Suivi de l'état des souscriptions
-- ✅ Dates d'activation et renouvellement
-- ✅ Gestion des renouvellements automatiques
-
-### Monitoring des Ressources
-- ✅ Suivi de l'utilisation disque
-- ✅ Suivi des utilisateurs actifs
-- ✅ Limites de stockage par plan
-- ✅ Alertes de dépassement
-
-## Installation
-
-```bash
-git clone https://github.com/dm3dez-debug/odoo_saas_subscriptions.git
-cd odoo_saas_subscriptions
-```
-
-1. Placer le module dans le répertoire `addons` d'Odoo
-2. Redémarrer le serveur Odoo
-3. Accéder à Applications > Odoo SaaS Subscriptions
-4. Cliquer sur Installer
-
-## Architecture
+## Structure du projet
 
 ```
 odoo_saas_subscriptions/
-├── __init__.py
-├── __manifest__.py
-├── models/
+├── models/                          # Modèles de données
 │   ├── __init__.py
-│   ├── saas_plan.py
-│   ├── saas_instance.py
-│   ├── saas_subscription.py
-│   └── saas_resource.py
-├── controllers/
+│   ├── saas_plan.py                # Formules SaaS
+│   ├── saas_instance.py            # Instances Odoo
+│   ├── saas_subscription.py        # Souscriptions
+│   ├── saas_resource.py            # Ressources
+│   └── scheduler.py                # Tâches planifiées
+├── controllers/                     # API REST
 │   ├── __init__.py
-│   └── main.py
-├── views/
+│   └── main.py                     # Endpoints
+├── views/                           # Interfaces Web
 │   ├── saas_plan_views.xml
 │   ├── saas_instance_views.xml
 │   ├── saas_subscription_views.xml
 │   ├── saas_resources_views.xml
 │   └── menu_views.xml
-├── security/
-│   └── ir.model.access.csv
-├── data/
-│   └── saas_plan_data.xml
-└── reports/
-    └── subscription_report.xml
+├── security/                        # Sécurité
+│   └── ir.model.access.csv         # Contrôles d'accès
+├── data/                            # Données initiales
+│   └── saas_plan_data.xml          # Plans par défaut
+├── reports/                         # Rapports
+│   └── subscription_report.xml     # Rapport PDF
+├── utils/                           # Utilitaires
+│   └── saas_utils.py               # Fonctions communes
+├── static/                          # Assets statiques
+├── __manifest__.py                  # Manifest du module
+├── API_DOCUMENTATION.md             # Documentation API
+├── INSTALLATION.md                  # Guide d'installation
+├── CHANGELOG.md                     # Historique des versions
+├── CONTRIBUTING.md                  # Guide de contribution
+└── README.md                        # Ce fichier
 ```
+
+## Installation rapide
+
+### 1. Cloner le repository
+
+```bash
+cd /path/to/odoo/addons
+git clone https://github.com/dm3dez-debug/odoo_saas_subscriptions.git
+```
+
+### 2. Redémarrer Odoo
+
+```bash
+sudo systemctl restart odoo
+# ou
+./odoo-bin -d database_name -u all
+```
+
+### 3. Installer le module
+
+1. Aller à **Apps** > **Search Apps**
+2. Chercher **"Odoo SaaS Subscriptions"**
+3. Cliquer sur **"Install"**
+
+Pour plus de détails, voir [INSTALLATION.md](INSTALLATION.md)
 
 ## Utilisation
 
-### Créer un Plan
-1. Aller à SaaS > Configuration > Plans
-2. Cliquer sur Créer
-3. Remplir les détails (nom, prix, limites de ressources)
-4. Sauvegarder
+### Créer un plan
 
-### Créer une Instance
-1. Aller à SaaS > Instances
-2. Cliquer sur Créer
+1. Aller à **SaaS** > **Configuration** > **Plans**
+2. Cliquer sur **"Créer"**
+3. Remplir les informations du plan
+4. Enregistrer
+
+### Créer une instance
+
+1. Aller à **SaaS** > **Gestion** > **Instances**
+2. Cliquer sur **"Créer"**
 3. Sélectionner le client et le plan
-4. Les ressources sont allouées automatiquement
-5. Activer l'instance
+4. Configurer l'accès
+5. Enregistrer et activer
 
-### Créer une Souscription
-1. Aller à SaaS > Souscriptions
-2. Cliquer sur Créer
-3. Lier le client, l'instance et le plan
-4. Définir les dates de début et renouvellement
-5. Sauvegarder
+### Gérer les souscriptions
 
-## Modèles de Données
+1. Aller à **SaaS** > **Gestion** > **Souscriptions**
+2. Créer ou modifier une souscription
+3. Activer la souscription
+4. Le système gère automatiquement les renouvellements
 
-### SaaS Plan
-- Nom du plan
-- Description
-- Prix mensuel/annuel
-- Limite de stockage
-- Limite d'utilisateurs
-- Nombre de modules inclus
-- Support prioritaire
+## API REST
 
-### SaaS Instance
-- Nom de l'instance
-- Client assigné
-- Plan sélectionné
-- URL d'accès
-- Statut (création, actif, suspendu, supprimé)
-- Date de création
-- Espace disque alloué/utilisé
+### Exemples d'utilisation
 
-### SaaS Subscription
-- Client
-- Instance
-- Plan
-- Date de début
-- Date de renouvellement
-- Statut (active, suspendue, expirée)
-- Prix
-- Remarques
+#### Récupérer les plans disponibles
 
-### SaaS Resource
-- Instance
-- Type de ressource (disque, utilisateurs, modules)
-- Limite
-- Utilisation actuelle
-- Pourcentage d'utilisation
-- Date de dernière mise à jour
+```bash
+curl -X GET http://localhost:8069/saas/plans \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
 
-## Contributions
+#### Récupérer les instances de l'utilisateur
 
-Les contributions sont bienvenues! Veuillez:
-1. Fork le projet
-2. Créer une branche feature (`git checkout -b feature/AmazingFeature`)
-3. Commit vos changements (`git commit -m 'Add some AmazingFeature'`)
-4. Push vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrir une Pull Request
+```bash
+curl -X GET http://localhost:8069/saas/instances \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+#### Créer une sauvegarde
+
+```bash
+curl -X POST http://localhost:8069/saas/instance/1/backup \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+Voir [API_DOCUMENTATION.md](API_DOCUMENTATION.md) pour la documentation complète.
+
+## Modèles de données
+
+### saas.plan
+Définit une formule SaaS avec:
+- Tarification (mensuelle/annuelle)
+- Limites de ressources
+- Fonctionnalités incluses
+- Support et add-ons
+
+### saas.instance
+Représente une instance Odoo avec:
+- Informations de base et d'accès
+- État du cycle de vie
+- Ressources allouées
+- Monitoring (CPU, mémoire, stockage)
+- Sauvegardes
+
+### saas.subscription
+Gère une souscription client avec:
+- Lien au client, plan et instance
+- État de la souscription
+- Tarification flexible
+- Renouvellement automatique
+- Historique des factures
+
+### saas.resource
+Suit l'utilisation des ressources avec:
+- Types de ressources (stockage, utilisateurs, etc.)
+- Limites et utilisation actuelle
+- Alertes configurables
+- Historique des modifications
+
+## Automatisations
+
+Le module inclut des tâches planifiées (cron) pour:
+
+- **Vérifier les expirations** - Vérifie et renouvelle les souscriptions
+- **Envoyer les notifications** - Alerte les clients avant expiration
+- **Nettoyer les instances** - Supprime les instances marquées anciennement
+
+## Sécurité
+
+- Contrôle d'accès granulaire par rôle
+- Vérification des permissions sur chaque endpoint
+- Isolation des données par client
+- Chiffrement des mots de passe
+- Audit trail complet
+
+## Dépendances
+
+- Odoo 19.0+
+- mail module (pour les notifications)
+- web module (pour les vues)
+
+## Contribution
+
+Les contributions sont bienvenues ! Voir [CONTRIBUTING.md](CONTRIBUTING.md) pour les directives.
 
 ## Licence
 
-LGPL-3.0 - voir le fichier LICENSE pour plus de détails.
+LGPL-3.0 - Voir LICENSE pour plus de détails
 
 ## Support
 
-Pour toute question ou problème, ouvrir une issue sur GitHub.
+- Documentation: [API_DOCUMENTATION.md](API_DOCUMENTATION.md)
+- Installation: [INSTALLATION.md](INSTALLATION.md)
+- Changelog: [CHANGELOG.md](CHANGELOG.md)
+- Ouvrir une issue sur GitHub
+
+## Auteur
+
+DM3DEZ Development - dm3dez@gmail.com
+
+## Remerciements
+
+Merci à la communauté Odoo pour l'inspiration et le support.
