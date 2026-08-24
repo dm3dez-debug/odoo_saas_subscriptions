@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_saas_plan_user,saas.plan access user,model_saas_plan,base.group_user,1,0,0,0
+access_saas_plan_manager,saas.plan access manager,model_saas_plan,base.group_erp_manager,1,1,1,0
+access_saas_instance_user,saas.instance access user,model_saas_instance,base.group_user,1,0,0,0
+access_saas_instance_manager,saas.instance access manager,model_saas_instance,base.group_erp_manager,1,1,1,0
+access_saas_subscription_user,saas.subscription access user,model_saas_subscription,base.group_user,1,0,0,0
+access_saas_subscription_manager,saas.subscription access manager,model_saas_subscription,base.group_erp_manager,1,1,1,0
+access_saas_resource_user,saas.resource access user,model_saas_resource,base.group_user,1,0,0,0
+access_saas_resource_manager,saas.resource access manager,model_saas_resource,base.group_erp_manager,1,1,1,0
