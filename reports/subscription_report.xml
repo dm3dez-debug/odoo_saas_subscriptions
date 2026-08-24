@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Rapport Souscriptions -->
+        <record id="saas_subscription_report" model="ir.actions.report">
+            <field name="name">Rapport Souscriptions SaaS</field>
+            <field name="model">saas.subscription</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">odoo_saas_subscriptions.report_subscription</field>
+            <field name="report_file">odoo_saas_subscriptions.report_subscription</field>
+            <field name="binding_model_id" ref="model_saas_subscription"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <!-- Template Rapport Souscriptions -->
+        <template id="report_subscription">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <h2 t-esc="o.name" class="text-center"/>
+                            <table class="table table-sm">
+                                <tr>
+                                    <td><strong>Client:</strong></td>
+                                    <td><t t-esc="o.partner_id.name"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plan:</strong></td>
+                                    <td><t t-esc="o.plan_id.name"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Instance:</strong></td>
+                                    <td><t t-esc="o.instance_id.name"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>État:</strong></td>
+                                    <td><t t-esc="o.state"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Date de Début:</strong></td>
+                                    <td><t t-esc="o.start_date"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Date de Renouvellement:</strong></td>
+                                    <td><t t-esc="o.next_renewal_date"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Période de Facturation:</strong></td>
+                                    <td><t t-esc="o.billing_period"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Montant Brut:</strong></td>
+                                    <td><t t-esc="o.amount"/> <t t-esc="o.currency_id.symbol"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Remise:</strong></td>
+                                    <td><t t-esc="o.discount_amount"/> <t t-esc="o.currency_id.symbol"/> (<t t-esc="o.discount_percent"/>%)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Montant Net:</strong></td>
+                                    <td><strong><t t-esc="o.net_amount"/> <t t-esc="o.currency_id.symbol"/></strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Renouvellement Automatique:</strong></td>
+                                    <td><t t-esc="'Oui' if o.auto_renewal else 'Non'"/></td>
+                                </tr>
+                            </table>
+                            <div class="row mt-4" t-if="o.notes">
+                                <div class="col-6">
+                                    <strong>Notes:</strong>
+                                    <p><t t-esc="o.notes"/></p>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
