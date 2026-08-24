@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vue formulaire Instance -->
+        <record id="saas_instance_form" model="ir.ui.view">
+            <field name="name">saas.instance.form</field>
+            <field name="model">saas.instance</field>
+            <field name="arch" type="xml">
+                <form string="Instance Odoo SaaS">
+                    <header>
+                        <button name="action_activate" string="Activer" type="object" class="oe_highlight" states="draft"/>
+                        <button name="action_suspend" string="Suspendre" type="object" states="active"/>
+                        <button name="action_enable" string="Réactiver" type="object" states="suspended"/>
+                        <button name="action_delete" string="Supprimer" type="object" states="active,suspended"/>
+                        <button name="action_backup" string="Sauvegarde" type="object" icon="fa-save"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_view_resources" class="oe_stat_button" icon="fa-database">
+                                <field name="resource_count" widget="statinfo" string="Ressources"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1><field name="name" placeholder="Nom de l'instance"/></h1>
+                        </div>
+                        <group>
+                            <group string="Informations Générales">
+                                <field name="code" readonly="1"/>
+                                <field name="partner_id"/>
+                                <field name="plan_id"/>
+                                <field name="description"/>
+                            </group>
+                            <group string="Accès">
+                                <field name="instance_url"/>
+                                <field name="database_name"/>
+                                <field name="admin_login"/>
+                                <field name="admin_password" password="True"/>
+                                <field name="master_password" password="True"/>
+                            </group>
+                        </group>
+                        <group string="Ressources Allouées">
+                            <group>
+                                <field name="allocated_storage_gb"/>
+                                <field name="used_storage_gb"/>
+                                <field name="storage_percentage" readonly="1" widget="progressbar"/>
+                            </group>
+                            <group>
+                                <field name="allocated_users"/>
+                                <field name="active_users"/>
+                                <field name="users_percentage" readonly="1" widget="progressbar"/>
+                            </group>
+                        </group>
+                        <group string="Monitoring">
+                            <group>
+                                <field name="cpu_usage_percent" readonly="1" widget="progressbar"/>
+                                <field name="memory_usage_percent" readonly="1" widget="progressbar"/>
+                                <field name="database_size_mb" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="is_production"/>
+                                <field name="white_label"/>
+                                <field name="custom_domain_name"/>
+                            </group>
+                        </group>
+                        <group string="Dates">
+                            <group>
+                                <field name="creation_date" readonly="1"/>
+                                <field name="activation_date" readonly="1"/>
+                                <field name="suspension_date" readonly="1"/>
+                                <field name="deletion_date" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="last_backup_date" readonly="1"/>
+                            </group>
+                        </group>
+                        <group string="Notes">
+                            <field name="notes" placeholder="Notes internes" nolabel="1" colspan="2"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vue liste Instance -->
+        <record id="saas_instance_tree" model="ir.ui.view">
+            <field name="name">saas.instance.tree</field>
+            <field name="model">saas.instance</field>
+            <field name="arch" type="xml">
+                <tree string="Instances Odoo SaaS" decoration-success="state=='active'" decoration-danger="state=='deleted'" decoration-warning="state=='suspended'">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="partner_id"/>
+                    <field name="plan_id"/>
+                    <field name="instance_url"/>
+                    <field name="state"/>
+                    <field name="storage_percentage" widget="progressbar"/>
+                    <field name="users_percentage" widget="progressbar"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vue recherche Instance -->
+        <record id="saas_instance_search" model="ir.ui.view">
+            <field name="name">saas.instance.search</field>
+            <field name="model">saas.instance</field>
+            <field name="arch" type="xml">
+                <search string="Instances Odoo SaaS">
+                    <field name="name" string="Nom"/>
+                    <field name="code" string="Code"/>
+                    <field name="partner_id" string="Client"/>
+                    <field name="plan_id" string="Plan"/>
+                    <filter name="active" string="Actives" domain="[('state', '=', 'active')]"/>
+                    <filter name="suspended" string="Suspendues" domain="[('state', '=', 'suspended')]"/>
+                    <filter name="deleted" string="Supprimées" domain="[('state', '=', 'deleted')]"/>
+                    <separator/>
+                    <group expand="0" string="Grouper par">
+                        <filter name="group_by_partner" string="Client" context="{'group_by': 'partner_id'}"/>
+                        <filter name="group_by_plan" string="Plan" context="{'group_by': 'plan_id'}"/>
+                        <filter name="group_by_state" string="État" context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action Instance -->
+        <record id="action_saas_instance" model="ir.actions.act_window">
+            <field name="name">Instances</field>
+            <field name="res_model">saas.instance</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="saas_instance_tree"/>
+            <field name="search_view_id" ref="saas_instance_search"/>
+        </record>
+    </data>
+</odoo>

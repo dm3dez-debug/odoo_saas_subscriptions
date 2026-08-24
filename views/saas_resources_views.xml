@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vue formulaire Ressource -->
+        <record id="saas_resource_form" model="ir.ui.view">
+            <field name="name">saas.resource.form</field>
+            <field name="model">saas.resource</field>
+            <field name="arch" type="xml">
+                <form string="Ressource Instance SaaS">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="resource_type" readonly="1"/></h1>
+                        </div>
+                        <group>
+                            <group string="Informations">
+                                <field name="instance_id" readonly="1"/>
+                                <field name="plan_id" readonly="1"/>
+                                <field name="resource_type" readonly="1"/>
+                            </group>
+                            <group string="Limites">
+                                <field name="limit_value"/>
+                                <field name="unit"/>
+                                <field name="current_usage"/>
+                                <field name="usage_percentage" readonly="1" widget="progressbar"/>
+                            </group>
+                        </group>
+                        <group string="Alertes">
+                            <group>
+                                <field name="warning_threshold" help="% d'utilisation pour avertissement"/>
+                                <field name="alert_threshold" help="% d'utilisation pour alerte critique"/>
+                            </group>
+                            <group>
+                                <field name="is_warning" readonly="1" widget="boolean"/>
+                                <field name="is_alert" readonly="1" widget="boolean"/>
+                            </group>
+                        </group>
+                        <group string="Notes">
+                            <field name="notes" placeholder="Notes" nolabel="1" colspan="2"/>
+                        </group>
+                        <group string="Dernière Mise à Jour">
+                            <field name="last_updated" readonly="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vue liste Ressource -->
+        <record id="saas_resource_tree" model="ir.ui.view">
+            <field name="name">saas.resource.tree</field>
+            <field name="model">saas.resource</field>
+            <field name="arch" type="xml">
+                <tree string="Ressources Instance SaaS" decoration-warning="is_warning" decoration-danger="is_alert">
+                    <field name="instance_id"/>
+                    <field name="resource_type"/>
+                    <field name="limit_value"/>
+                    <field name="unit"/>
+                    <field name="current_usage"/>
+                    <field name="usage_percentage" widget="progressbar"/>
+                    <field name="is_warning" widget="boolean"/>
+                    <field name="is_alert" widget="boolean"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vue recherche Ressource -->
+        <record id="saas_resource_search" model="ir.ui.view">
+            <field name="name">saas.resource.search</field>
+            <field name="model">saas.resource</field>
+            <field name="arch" type="xml">
+                <search string="Ressources Instance SaaS">
+                    <field name="instance_id" string="Instance"/>
+                    <field name="resource_type" string="Type"/>
+                    <filter name="warning" string="Avertissements" domain="[('is_warning', '=', True)]"/>
+                    <filter name="alert" string="Alertes Critiques" domain="[('is_alert', '=', True)]"/>
+                    <separator/>
+                    <group expand="0" string="Grouper par">
+                        <filter name="group_by_instance" string="Instance" context="{'group_by': 'instance_id'}"/>
+                        <filter name="group_by_type" string="Type de Ressource" context="{'group_by': 'resource_type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action Ressource -->
+        <record id="action_saas_resource" model="ir.actions.act_window">
+            <field name="name">Ressources</field>
+            <field name="res_model">saas.resource</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="saas_resource_tree"/>
+            <field name="search_view_id" ref="saas_resource_search"/>
+        </record>
+    </data>
+</odoo>

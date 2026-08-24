@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Menu principal SaaS -->
+        <menuitem id="menu_saas_main" name="SaaS" web_icon="odoo_saas_subscriptions,static/description/icon.png" sequence="1"/>
+
+        <!-- Sous-menu Configuration -->
+        <menuitem id="menu_saas_config" name="Configuration" parent="menu_saas_main" sequence="1"/>
+        <menuitem id="menu_saas_plan" name="Plans" parent="menu_saas_config" action="action_saas_plan" sequence="1"/>
+
+        <!-- Sous-menu Gestion -->
+        <menuitem id="menu_saas_management" name="Gestion" parent="menu_saas_main" sequence="2"/>
+        <menuitem id="menu_saas_instance" name="Instances" parent="menu_saas_management" action="action_saas_instance" sequence="1"/>
+        <menuitem id="menu_saas_subscription" name="Souscriptions" parent="menu_saas_management" action="action_saas_subscription" sequence="2"/>
+        <menuitem id="menu_saas_resource" name="Ressources" parent="menu_saas_management" action="action_saas_resource" sequence="3"/>
+    </data>
+</odoo>

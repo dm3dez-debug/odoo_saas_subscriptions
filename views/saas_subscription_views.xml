@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vue formulaire Souscription -->
+        <record id="saas_subscription_form" model="ir.ui.view">
+            <field name="name">saas.subscription.form</field>
+            <field name="model">saas.subscription</field>
+            <field name="arch" type="xml">
+                <form string="Souscription SaaS">
+                    <header>
+                        <button name="action_activate" string="Activer" type="object" class="oe_highlight" states="draft"/>
+                        <button name="action_pause" string="Mettre en pause" type="object" states="active"/>
+                        <button name="action_resume" string="Reprendre" type="object" states="paused"/>
+                        <button name="action_renew" string="Renouveler" type="object" states="active"/>
+                        <button name="action_cancel" string="Annuler" type="object" states="active,paused"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name" placeholder="Référence" readonly="1"/></h1>
+                        </div>
+                        <group>
+                            <group string="Informations Générales">
+                                <field name="partner_id"/>
+                                <field name="plan_id"/>
+                                <field name="instance_id"/>
+                                <field name="sale_order_id"/>
+                            </group>
+                            <group string="Dates">
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                                <field name="next_renewal_date" readonly="1"/>
+                                <field name="last_renewal_date" readonly="1"/>
+                                <field name="trial_end_date"/>
+                            </group>
+                        </group>
+                        <group string="Facturation">
+                            <group>
+                                <field name="billing_period"/>
+                                <field name="amount" readonly="1"/>
+                                <field name="discount_percent"/>
+                                <field name="discount_amount" readonly="1"/>
+                                <field name="net_amount" readonly="1"/>
+                                <field name="currency_id"/>
+                            </group>
+                            <group>
+                                <field name="is_trial"/>
+                                <field name="auto_renewal"/>
+                                <field name="auto_upgrade"/>
+                            </group>
+                        </group>
+                        <group string="Configuration">
+                            <field name="custom_config" nolabel="1" colspan="2"/>
+                        </group>
+                        <group string="Notes">
+                            <field name="notes" placeholder="Notes internes" nolabel="1" colspan="2"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vue liste Souscription -->
+        <record id="saas_subscription_tree" model="ir.ui.view">
+            <field name="name">saas.subscription.tree</field>
+            <field name="model">saas.subscription</field>
+            <field name="arch" type="xml">
+                <tree string="Souscriptions SaaS" decoration-success="state=='active'" decoration-danger="state=='cancelled'" decoration-warning="state=='expired'">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="plan_id"/>
+                    <field name="instance_id"/>
+                    <field name="state"/>
+                    <field name="start_date"/>
+                    <field name="next_renewal_date"/>
+                    <field name="net_amount" sum="Montant Total"/>
+                    <field name="billing_period"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vue recherche Souscription -->
+        <record id="saas_subscription_search" model="ir.ui.view">
+            <field name="name">saas.subscription.search</field>
+            <field name="model">saas.subscription</field>
+            <field name="arch" type="xml">
+                <search string="Souscriptions SaaS">
+                    <field name="name" string="Référence"/>
+                    <field name="partner_id" string="Client"/>
+                    <field name="plan_id" string="Plan"/>
+                    <field name="instance_id" string="Instance"/>
+                    <filter name="active" string="Actives" domain="[('state', '=', 'active')]"/>
+                    <filter name="paused" string="En pause" domain="[('state', '=', 'paused')]"/>
+                    <filter name="expired" string="Expirées" domain="[('state', '=', 'expired')]"/>
+                    <filter name="trial" string="Période d'essai" domain="[('is_trial', '=', True)]"/>
+                    <separator/>
+                    <filter name="renew_soon" string="Renouvellement proche" domain="[('next_renewal_date', '&lt;', context_today().strftime('%Y-%m-%d')+' +7 days')]"/>
+                    <separator/>
+                    <group expand="0" string="Grouper par">
+                        <filter name="group_by_partner" string="Client" context="{'group_by': 'partner_id'}"/>
+                        <filter name="group_by_plan" string="Plan" context="{'group_by': 'plan_id'}"/>
+                        <filter name="group_by_state" string="État" context="{'group_by': 'state'}"/>
+                        <filter name="group_by_billing" string="Période Facturation" context="{'group_by': 'billing_period'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action Souscription -->
+        <record id="action_saas_subscription" model="ir.actions.act_window">
+            <field name="name">Souscriptions</field>
+            <field name="res_model">saas.subscription</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="saas_subscription_tree"/>
+            <field name="search_view_id" ref="saas_subscription_search"/>
+        </record>
+    </data>
+</odoo>
